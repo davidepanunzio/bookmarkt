@@ -27,10 +27,10 @@ Mini e-commerce di libri realizzato come progetto finale per l'esame ITS Web Dev
 
 ## Requisiti
 
-- PHP >= 8.2 con estensioni `pdo_mysql` e `zip`
+- PHP >= 8.2 con estensione `zip` (più `pdo_mysql` per MySQL, oppure `pdo_sqlite` per l'alternativa SQLite — quest'ultima è già inclusa in qualunque installazione PHP standard, nessun'estensione da aggiungere)
 - Composer
 - Node.js e npm
-- MySQL 8
+- MySQL 8 **oppure**, in alternativa, nessun database server: vedi "Piano B" più sotto
 
 ## Installazione
 
@@ -58,6 +58,22 @@ php artisan serve
 ```
 
 Il sito è raggiungibile su `http://127.0.0.1:8000`.
+
+### Piano B: nessun MySQL disponibile (SQLite)
+
+Se sul PC non c'è un server MySQL configurato (es. niente Laragon/XAMPP), si può usare SQLite: un singolo file, senza installare né configurare nessun database server. Al posto della sezione "database MySQL" sopra:
+
+1. In `.env`, cambia `DB_CONNECTION=mysql` in `DB_CONNECTION=sqlite` ed elimina (o commenta) la riga `DB_DATABASE=bookmarkt` — importante: se resta, Laravel la interpreta come nome del file SQLite e ne crea uno sbagliato nella cartella principale del progetto invece che in `database/`. Le righe `DB_HOST`, `DB_PORT`, `DB_USERNAME`, `DB_PASSWORD` non servono più ma non danno problemi se restano.
+2. Crea il file del database:
+   ```powershell
+   New-Item database\database.sqlite -ItemType File   # PowerShell
+   ```
+   ```bash
+   touch database/database.sqlite   # Git Bash / terminale VS Code
+   ```
+3. Prosegui normalmente da `php artisan migrate --seed` in poi (stessi comandi, nessun'altra differenza).
+
+Verificato che schema, seeder e test funzionano in modo identico con SQLite: per chi visita il sito non cambia nulla.
 
 ## Credenziali demo
 
