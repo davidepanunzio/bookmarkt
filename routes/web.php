@@ -9,6 +9,7 @@ use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
@@ -16,21 +17,21 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 
-// Home: reindirizza direttamente al catalogo dei libri
-Route::redirect('/', '/libri');
+// Pagine informative statiche, linkate dal footer
+Route::view('/privacy', 'legal.privacy')->name('legal.privacy');
+Route::view('/termini', 'legal.termini')->name('legal.termini');
+
+// Home page pubblica: libro in evidenza + ultimi arrivi
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Catalogo pubblico: visibile anche senza effettuare il login
 Route::get('/libri', [BookController::class, 'index'])->name('books.index');
 Route::get('/libri/{book:slug}', [BookController::class, 'show'])->name('books.show');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profilo', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profilo', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profilo', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Carrello personale dell'utente autenticato
     Route::get('/carrello', [CartController::class, 'index'])->name('cart.index');
@@ -40,6 +41,7 @@ Route::middleware('auth')->group(function () {
 
     // Checkout e storico ordini
     Route::get('/ordini', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/checkout', [OrderController::class, 'checkout'])->name('orders.checkout');
     Route::post('/ordini', [OrderController::class, 'store'])->name('orders.store');
     Route::get('/ordini/{order}', [OrderController::class, 'show'])->name('orders.show');
 
@@ -53,10 +55,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/recensioni/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
 
     // Segnalazioni: l'utente contatta gli amministratori e consulta lo storico delle proprie
-    Route::get('/segnalazioni', [ReportController::class, 'index'])->name('reports.index');
-    Route::get('/segnalazioni/nuova', [ReportController::class, 'create'])->name('reports.create');
-    Route::post('/segnalazioni', [ReportController::class, 'store'])->name('reports.store');
-    Route::get('/segnalazioni/{report}', [ReportController::class, 'show'])->name('reports.show');
+    Route::get('/contattaci', [ReportController::class, 'index'])->name('reports.index');
+    Route::get('/contattaci/nuova', [ReportController::class, 'create'])->name('reports.create');
+    Route::post('/contattaci', [ReportController::class, 'store'])->name('reports.store');
+    Route::get('/contattaci/{report}', [ReportController::class, 'show'])->name('reports.show');
 });
 
 // Area di gestione del catalogo: riservata agli utenti con ruolo "admin"

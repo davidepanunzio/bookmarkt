@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-bold text-2xl text-gray-900 leading-tight">
             {{ $user->name }}
         </h2>
     </x-slot>
@@ -20,7 +20,7 @@
                 <span class="font-semibold text-gray-800">{{ $user->name }}</span>
             </nav>
 
-            <div class="bg-white rounded-lg shadow-sm p-6">
+            <div class="bg-white rounded-2xl p-6">
                 <div class="flex items-start justify-between flex-wrap gap-4">
                     <div>
                         <h1 class="text-xl font-bold text-gray-900">{{ $user->name }}</h1>
@@ -51,7 +51,7 @@
             </div>
 
             {{-- Ordini effettuati --}}
-            <div class="bg-white rounded-lg shadow-sm">
+            <div class="bg-white rounded-2xl">
                 <h3 class="font-semibold text-gray-900 p-4 pb-0">Ordini ({{ $user->orders->count() }})</h3>
                 <div class="divide-y mt-2">
                     @forelse ($user->orders as $ordine)
@@ -69,7 +69,7 @@
             </div>
 
             {{-- Recensioni scritte --}}
-            <div class="bg-white rounded-lg shadow-sm">
+            <div class="bg-white rounded-2xl">
                 <h3 class="font-semibold text-gray-900 p-4 pb-0">Recensioni ({{ $user->reviews->count() }})</h3>
                 <div class="divide-y mt-2">
                     @forelse ($user->reviews as $recensione)

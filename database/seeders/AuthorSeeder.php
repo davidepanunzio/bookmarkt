@@ -19,6 +19,7 @@ class AuthorSeeder extends Seeder
             ['name' => 'Primo Levi', 'bio' => 'Scrittore e chimico italiano, autore di memorie e romanzi.'],
             ['name' => 'Elsa Morante', 'bio' => 'Scrittrice italiana, autrice di "La storia".'],
             ['name' => 'Alessandro Manzoni', 'bio' => 'Scrittore e poeta italiano, autore de "I promessi sposi".'],
+            ['name' => 'Licia Troisi', 'bio' => 'Scrittrice italiana di fantasy, autrice della saga "Cronache del mondo emerso".'],
         ];
 
         foreach ($autori as $autore) {

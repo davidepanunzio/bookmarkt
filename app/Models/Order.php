@@ -32,7 +32,17 @@ class Order extends Model
         self::STATUS_ANNULLATO => 'Annullato',
     ];
 
-    protected $fillable = ['user_id', 'total', 'status'];
+    // Metodi di pagamento supportati (nessun vero gateway: sono scelte dichiarate dal cliente)
+    public const PAYMENT_CONTRASSEGNO = 'contrassegno';
+
+    public const PAYMENT_BONIFICO = 'bonifico';
+
+    public const PAYMENT_LABELS = [
+        self::PAYMENT_CONTRASSEGNO => 'Contrassegno (pagamento alla consegna)',
+        self::PAYMENT_BONIFICO => 'Bonifico bancario',
+    ];
+
+    protected $fillable = ['user_id', 'total', 'status', 'shipping_address', 'payment_method', 'note'];
 
     protected function casts(): array
     {
@@ -57,5 +67,11 @@ class Order extends Model
     public function statusLabel(): string
     {
         return self::STATUS_LABELS[$this->status] ?? $this->status;
+    }
+
+    // Etichetta leggibile del metodo di pagamento scelto
+    public function paymentMethodLabel(): string
+    {
+        return self::PAYMENT_LABELS[$this->payment_method] ?? $this->payment_method;
     }
 }

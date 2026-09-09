@@ -21,7 +21,9 @@ class OrderFactory extends Factory
         return [
             'user_id' => User::factory(),
             'total' => fake()->randomFloat(2, 10, 150),
-            'status' => 'in_attesa',
+            'status' => Order::STATUS_IN_ATTESA,
+            'shipping_address' => fake()->streetAddress().', '.fake()->postcode().' '.fake()->city(),
+            'payment_method' => fake()->randomElement([Order::PAYMENT_CONTRASSEGNO, Order::PAYMENT_BONIFICO]),
         ];
     }
 }

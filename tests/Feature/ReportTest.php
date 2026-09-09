@@ -27,6 +27,20 @@ test('un ospite non può inviare una segnalazione', function () {
     expect(Report::count())->toBe(0);
 });
 
+test('un admin non può usare la funzione contattaci riservata agli utenti', function () {
+    $admin = User::factory()->create(['role' => User::ROLE_ADMIN]);
+
+    $this->actingAs($admin)->get(route('reports.index'))->assertForbidden();
+    $this->actingAs($admin)->get(route('reports.create'))->assertForbidden();
+
+    $this->actingAs($admin)->post(route('reports.store'), [
+        'subject' => 'Test',
+        'message' => 'Test',
+    ])->assertForbidden();
+
+    expect(Report::count())->toBe(0);
+});
+
 test('un cliente normale non può vedere le segnalazioni nel pannello admin', function () {
     $cliente = User::factory()->create(['role' => User::ROLE_USER]);
 

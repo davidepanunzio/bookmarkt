@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Models\Order;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
@@ -33,10 +34,33 @@ class OrderController extends Controller
     }
 
     /**
-     * Checkout: trasforma il carrello dell'utente in un ordine.
+     * Pagina di checkout: riepilogo del carrello + dati di spedizione e pagamento.
      */
-    public function store(): RedirectResponse
+    public function checkout(): View|RedirectResponse
     {
+        $cart = Cart::with('items.book')->where('user_id', auth()->id())->first();
+
+        if (! $cart || $cart->items->isEmpty()) {
+            return redirect()->route('cart.index')->with('status', 'Il carrello è vuoto.');
+        }
+
+        // Precompila l'indirizzo con quello dell'ultimo ordine, se esiste, per comodità
+        $ultimoIndirizzo = auth()->user()->orders()->latest()->value('shipping_address');
+
+        return view('orders.checkout', compact('cart', 'ultimoIndirizzo'));
+    }
+
+    /**
+     * Conferma il checkout: trasforma il carrello dell'utente in un ordine.
+     */
+    public function store(Request $request): RedirectResponse
+    {
+        $dati = $request->validate([
+            'shipping_address' => ['required', 'string', 'max:255'],
+            'payment_method' => ['required', 'in:'.implode(',', array_keys(Order::PAYMENT_LABELS))],
+            'note' => ['nullable', 'string', 'max:500'],
+        ]);
+
         $cart = Cart::with('items.book')->where('user_id', auth()->id())->first();
 
         if (! $cart || $cart->items->isEmpty()) {
@@ -52,11 +76,12 @@ class OrderController extends Controller
         }
 
         // Tutte le operazioni avvengono in un'unica transazione: o vanno a buon fine tutte, o nessuna
-        $order = DB::transaction(function () use ($cart) {
+        $order = DB::transaction(function () use ($cart, $dati) {
             $order = Order::create([
                 'user_id' => auth()->id(),
                 'total' => $cart->totale(),
                 'status' => Order::STATUS_IN_ATTESA,
+                ...$dati,
             ]);
 
             foreach ($cart->items as $item) {

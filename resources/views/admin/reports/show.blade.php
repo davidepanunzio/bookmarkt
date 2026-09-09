@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-bold text-2xl text-gray-900 leading-tight">
             {{ __('Segnalazione') }} #{{ $report->id }}
         </h2>
     </x-slot>
@@ -20,7 +20,7 @@
                 <span class="font-semibold text-gray-800">#{{ $report->id }}</span>
             </nav>
 
-            <div class="bg-white rounded-lg shadow-sm p-6">
+            <div class="bg-white rounded-2xl p-6">
                 <div class="flex items-start justify-between flex-wrap gap-4">
                     <div>
                         <h1 class="text-xl font-bold text-gray-900">{{ $report->subject }}</h1>
@@ -47,7 +47,7 @@
             @endif
 
             {{-- Form per rispondere e cambiare lo stato della segnalazione --}}
-            <div class="bg-white rounded-lg shadow-sm p-6">
+            <div class="bg-white rounded-2xl p-6">
                 <h3 class="font-semibold text-gray-900 mb-3">
                     {{ $report->hasReply() ? 'Modifica risposta e stato' : 'Rispondi e aggiorna stato' }}
                 </h3>

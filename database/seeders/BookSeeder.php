@@ -25,17 +25,23 @@ class BookSeeder extends Seeder
             ['title' => 'Se questo è un uomo', 'author' => 'Primo Levi', 'category' => 'Biografie', 'price' => 9.90, 'stock' => 18],
             ['title' => 'La storia', 'author' => 'Elsa Morante', 'category' => 'Narrativa', 'price' => 15.50, 'stock' => 12],
             ['title' => 'I promessi sposi', 'author' => 'Alessandro Manzoni', 'category' => 'Narrativa', 'price' => 8.90, 'stock' => 40],
+            ['title' => 'Nihal della Terra del Vento', 'author' => 'Licia Troisi', 'category' => 'Fantasy', 'price' => 13.90, 'stock' => 20],
+            ['title' => 'La ragazza drago', 'author' => 'Licia Troisi', 'category' => 'Fantasy', 'price' => 15.90, 'stock' => 15],
         ];
 
         foreach ($libri as $libro) {
+            $slug = Str::slug($libro['title']);
+
             Book::create([
                 'title' => $libro['title'],
-                'slug' => Str::slug($libro['title']),
+                'slug' => $slug,
                 'description' => 'Descrizione di esempio per "'.$libro['title'].'". Testo segnaposto da sostituire con la trama reale.',
                 'price' => $libro['price'],
                 'stock' => $libro['stock'],
                 'category_id' => Category::where('name', $libro['category'])->first()->id,
                 'author_id' => Author::where('name', $libro['author'])->first()->id,
+                // Copertina reale già presente in storage/app/public/covers (vedi cartella "covers")
+                'cover_image' => 'covers/'.$slug.'.png',
             ]);
         }
     }

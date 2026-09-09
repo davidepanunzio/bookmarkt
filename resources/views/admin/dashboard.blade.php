@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-bold text-2xl text-gray-900 leading-tight">
             {{ __('Dashboard amministratore') }}
         </h2>
     </x-slot>
@@ -27,30 +27,30 @@
 
             {{-- Statistiche generali, in forma di "card" --}}
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="bg-white rounded-lg shadow-sm p-5">
+                <div class="bg-white rounded-2xl p-5">
                     <p class="text-sm text-gray-500">Libri in catalogo</p>
                     <p class="text-2xl font-bold text-gray-900">{{ $numeroLibri }}</p>
                 </div>
-                <div class="bg-white rounded-lg shadow-sm p-5">
+                <div class="bg-white rounded-2xl p-5">
                     <p class="text-sm text-gray-500">Categorie</p>
                     <p class="text-2xl font-bold text-gray-900">{{ $numeroCategorie }}</p>
                 </div>
-                <div class="bg-white rounded-lg shadow-sm p-5">
+                <div class="bg-white rounded-2xl p-5">
                     <p class="text-sm text-gray-500">Autori</p>
                     <p class="text-2xl font-bold text-gray-900">{{ $numeroAutori }}</p>
                 </div>
-                <div class="bg-white rounded-lg shadow-sm p-5">
+                <div class="bg-white rounded-2xl p-5">
                     <p class="text-sm text-gray-500">Clienti registrati</p>
                     <p class="text-2xl font-bold text-gray-900">{{ $numeroClienti }}</p>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="bg-white rounded-lg shadow-sm p-5">
+                <div class="bg-white rounded-2xl p-5">
                     <p class="text-sm text-gray-500">Ordini totali</p>
                     <p class="text-2xl font-bold text-gray-900">{{ $numeroOrdini }}</p>
                 </div>
-                <div class="bg-white rounded-lg shadow-sm p-5">
+                <div class="bg-white rounded-2xl p-5">
                     <p class="text-sm text-gray-500">Fatturato (ordini non annullati)</p>
                     <p class="text-2xl font-bold text-gray-900">{{ number_format($fatturatoTotale, 2, ',', '.') }} &euro;</p>
                 </div>
@@ -58,7 +58,7 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {{-- Suddivisione ordini per stato --}}
-                <div class="bg-white rounded-lg shadow-sm p-5">
+                <div class="bg-white rounded-2xl p-5">
                     <h3 class="font-semibold text-gray-900 mb-3">Ordini per stato</h3>
                     @foreach (\App\Models\Order::STATUS_LABELS as $valore => $etichetta)
                         <div class="flex items-center justify-between py-1">
@@ -69,7 +69,7 @@
                 </div>
 
                 {{-- Libri più venduti --}}
-                <div class="bg-white rounded-lg shadow-sm p-5 lg:col-span-2">
+                <div class="bg-white rounded-2xl p-5 lg:col-span-2">
                     <h3 class="font-semibold text-gray-900 mb-3">Libri più venduti</h3>
                     @forelse ($libriPiuVenduti as $riga)
                         <div class="flex items-center justify-between py-1">
@@ -85,7 +85,7 @@
             </div>
 
             {{-- Ultimi ordini ricevuti --}}
-            <div class="bg-white rounded-lg shadow-sm">
+            <div class="bg-white rounded-2xl">
                 <div class="p-5 flex items-center justify-between">
                     <h3 class="font-semibold text-gray-900">Ultimi ordini</h3>
                     <a href="{{ route('admin.orders.index') }}" class="text-sm text-indigo-600 underline">Vedi tutti</a>

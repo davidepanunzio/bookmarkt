@@ -15,6 +15,9 @@ class ReportController extends Controller
      */
     public function index(): View
     {
+        // Un admin gestisce le segnalazioni dal pannello, non ne invia di proprie
+        abort_if(auth()->user()->isAdmin(), 403);
+
         $segnalazioni = auth()->user()->reports()->latest()->paginate(10);
 
         return view('reports.index', compact('segnalazioni'));
@@ -25,6 +28,8 @@ class ReportController extends Controller
      */
     public function create(): View
     {
+        abort_if(auth()->user()->isAdmin(), 403);
+
         // Solo gli ordini dell'utente, per poterne collegare uno alla segnalazione (facoltativo)
         $ordini = auth()->user()->orders()->latest()->get();
 
@@ -36,6 +41,8 @@ class ReportController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        abort_if(auth()->user()->isAdmin(), 403);
+
         $dati = $request->validate([
             'subject' => ['required', 'string', 'max:255'],
             'message' => ['required', 'string', 'max:2000'],

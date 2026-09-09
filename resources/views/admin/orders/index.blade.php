@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-bold text-2xl text-gray-900 leading-tight">
             {{ __('Gestione ordini') }}
         </h2>
     </x-slot>
@@ -36,7 +36,7 @@
                 @endif
             </form>
 
-            <div class="bg-white rounded-lg shadow-sm divide-y">
+            <div class="bg-white rounded-2xl divide-y">
                 @forelse ($ordini as $ordine)
                     <a href="{{ route('admin.orders.show', $ordine) }}" class="p-4 flex items-center justify-between hover:bg-gray-50">
                         <div>

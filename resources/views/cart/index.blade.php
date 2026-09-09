@@ -1,71 +1,83 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-bold text-2xl text-gray-900">
             {{ __('Il tuo carrello') }}
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-3xl mx-auto sm:px-6 lg:px-8 space-y-6">
+    <div class="pb-16">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 
             @if (session('status'))
-                <div class="p-4 bg-green-100 border border-green-300 text-green-800 rounded-lg">
+                <div class="mb-6 p-4 bg-green-100 border border-green-300 text-green-800 rounded-lg">
                     {{ session('status') }}
                 </div>
             @endif
 
             @if ($cart->items->isEmpty())
-                <div class="bg-white rounded-lg shadow-sm p-6 text-center text-gray-600">
+                <div class="bg-white rounded-2xl p-6 text-center text-gray-600">
                     Il carrello è vuoto.
                     <a href="{{ route('books.index') }}" class="text-indigo-600 underline">Vai al catalogo</a>
                 </div>
             @else
-                <div class="bg-white rounded-lg shadow-sm divide-y">
-                    @foreach ($cart->items as $item)
-                        <div class="p-4 flex items-center justify-between gap-4">
-                            <div>
-                                <a href="{{ route('books.show', $item->book) }}" class="font-medium text-gray-900 hover:underline">
-                                    {{ $item->book->title }}
-                                </a>
-                                <p class="text-sm text-gray-500">{{ number_format($item->book->price, 2, ',', '.') }} &euro; cad.</p>
-                            </div>
+                <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8 items-start">
+                    {{-- Righe del carrello --}}
+                    <div class="space-y-4">
+                        @foreach ($cart->items as $item)
+                            <div class="bg-white rounded-2xl p-4 flex items-center gap-4">
+                                <x-book-cover :book="$item->book" class="w-16 shrink-0" />
 
-                            <div class="flex items-center gap-3">
-                                <form method="POST" action="{{ route('cart.update', $item) }}" class="flex items-center gap-2">
-                                    @csrf
-                                    @method('PATCH')
-                                    <input type="number" name="quantity" value="{{ $item->quantity }}" min="1"
-                                           max="{{ $item->book->stock }}"
-                                           class="w-16 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                                    <button type="submit" class="text-sm text-indigo-600 underline">Aggiorna</button>
-                                </form>
+                                <div class="flex-1 min-w-0">
+                                    <a href="{{ route('books.show', $item->book) }}" class="font-serif font-semibold text-gray-900 hover:underline">
+                                        {{ $item->book->title }}
+                                    </a>
+                                    <p class="text-sm text-gray-500">{{ $item->book->author->name }}</p>
 
-                                <span class="font-semibold text-gray-900 w-20 text-right">
+                                    <div class="mt-2 flex items-center gap-3">
+                                        <form method="POST" action="{{ route('cart.update', $item) }}" class="flex items-center gap-2">
+                                            @csrf
+                                            @method('PATCH')
+                                            <input type="number" name="quantity" value="{{ $item->quantity }}" min="1"
+                                                   max="{{ $item->book->stock }}"
+                                                   class="w-16 rounded-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 text-sm">
+                                            <button type="submit" class="text-xs text-indigo-600 underline">Aggiorna</button>
+                                        </form>
+
+                                        <form method="POST" action="{{ route('cart.destroy', $item) }}"
+                                              onsubmit="return confirm('Rimuovere questo libro dal carrello?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-xs text-red-600 underline">Rimuovi</button>
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <span class="font-semibold text-gray-900 shrink-0">
                                     {{ number_format($item->subtotale(), 2, ',', '.') }} &euro;
                                 </span>
-
-                                <form method="POST" action="{{ route('cart.destroy', $item) }}"
-                                      onsubmit="return confirm('Rimuovere questo libro dal carrello?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-sm text-red-600 underline">Rimuovi</button>
-                                </form>
                             </div>
+                        @endforeach
+                    </div>
+
+                    {{-- Riepilogo --}}
+                    <div class="bg-green-50 border border-green-100 rounded-2xl p-6 lg:sticky lg:top-6">
+                        <h3 class="font-serif text-lg font-bold text-gray-900 mb-4">Riepilogo</h3>
+                        <div class="flex items-center justify-between text-sm text-gray-700 py-1">
+                            <span>Libri ({{ $cart->items->sum('quantity') }})</span>
+                            <span>{{ number_format($cart->totale(), 2, ',', '.') }} &euro;</span>
                         </div>
-                    @endforeach
-                </div>
+                        <div class="border-t border-green-200 mt-3 pt-3 flex items-center justify-between">
+                            <span class="font-semibold text-gray-900">Totale</span>
+                            <span class="font-serif text-xl font-bold text-gray-900">{{ number_format($cart->totale(), 2, ',', '.') }} &euro;</span>
+                        </div>
 
-                <div class="bg-white rounded-lg shadow-sm p-6 flex items-center justify-between">
-                    <span class="text-lg font-semibold text-gray-900">Totale</span>
-                    <span class="text-2xl font-bold text-gray-900">{{ number_format($cart->totale(), 2, ',', '.') }} &euro;</span>
+                        <a href="{{ route('orders.checkout') }}" class="block mt-4">
+                            <x-primary-button class="w-full justify-center py-3">
+                                {{ __('Procedi al checkout') }}
+                            </x-primary-button>
+                        </a>
+                    </div>
                 </div>
-
-                <form method="POST" action="{{ route('orders.store') }}">
-                    @csrf
-                    <x-primary-button class="w-full justify-center py-3">
-                        {{ __('Conferma ordine') }}
-                    </x-primary-button>
-                </form>
             @endif
         </div>
     </div>

@@ -1,2 +1,16 @@
 *
 !.gitignore
+# Le copertine dei libri del seeder sono asset della demo, non upload temporanei: vanno versionate
+!covers/
+covers/*
+!covers/il-barone-rampante.png
+!covers/le-cosmicomiche.png
+!covers/il-nome-della-rosa.png
+!covers/il-pendolo-di-foucault.png
+!covers/come-si-fa-una-tesi-di-laurea.png
+!covers/la-forma-dellacqua.png
+!covers/se-questo-e-un-uomo.png
+!covers/la-storia.png
+!covers/i-promessi-sposi.png
+!covers/nihal-della-terra-del-vento.png
+!covers/la-ragazza-drago.png

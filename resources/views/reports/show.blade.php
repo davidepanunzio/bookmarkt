@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-bold text-2xl text-gray-900 leading-tight">
             {{ __('Segnalazione') }} #{{ $report->id }}
         </h2>
     </x-slot>
@@ -14,7 +14,7 @@
                 </div>
             @endif
 
-            <div class="bg-white rounded-lg shadow-sm p-6">
+            <div class="bg-white rounded-2xl p-6">
                 <div class="flex items-start justify-between flex-wrap gap-4">
                     <div>
                         <h1 class="text-xl font-bold text-gray-900">{{ $report->subject }}</h1>

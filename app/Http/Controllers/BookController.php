@@ -78,7 +78,16 @@ class BookController extends Controller
             ? $book->reviews->firstWhere('user_id', auth()->id())
             : null;
 
-        return view('books.show', compact('book', 'nelPreferiti', 'miaRecensione'));
+        // Altri libri della stessa categoria, per "Se ti è piaciuto questo"
+        $libriSimili = Book::where('category_id', $book->category_id)
+            ->where('id', '!=', $book->id)
+            ->with(['category', 'author'])
+            ->withAvg('reviews', 'rating')
+            ->withCount('reviews')
+            ->take(4)
+            ->get();
+
+        return view('books.show', compact('book', 'nelPreferiti', 'miaRecensione', 'libriSimili'));
     }
 
     /**
