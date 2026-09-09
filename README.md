@@ -75,6 +75,23 @@ Se sul PC non c'è un server MySQL configurato (es. niente Laragon/XAMPP), si pu
 
 Verificato che schema, seeder e test funzionano in modo identico con SQLite: per chi visita il sito non cambia nulla.
 
+### Le copertine dei libri non si vedono (problema symlink su Windows)
+
+`php artisan storage:link` crea un **collegamento simbolico** da `public/storage` a `storage/app/public`, che è il modo in cui Laravel espone pubblicamente i file caricati (in questo progetto, le copertine dei libri). Se questo comando fallisce, ogni copertina risulta un'immagine rotta in tutto il sito.
+
+**Il problema**: su Windows, creare un collegamento simbolico richiede privilegi particolari. Se l'account con cui hai fatto accesso non li ha, il comando fallisce con un errore relativo ai permessi (es. "Impossibile creare un collegamento simbolico" / codice errore 1314).
+
+**Come risolvere**, in ordine di preferenza:
+
+1. **Esegui il terminale come amministratore** (tasto destro sull'icona di VS Code o del terminale → "Esegui come amministratore"), poi rilancia `php artisan storage:link`.
+2. **In alternativa, attiva la Modalità sviluppatore**: Impostazioni di Windows → Privacy e sicurezza → Per sviluppatori → attiva "Modalità sviluppatore". Permette di creare collegamenti simbolici senza eseguire da amministratore.
+3. **Se nessuna delle due è praticabile** (es. PC scolastico senza questi permessi), si può aggirare il problema copiando i file invece di collegarli — non è un vero symlink (se aggiungi nuove copertine dopo, va ripetuto), ma per una demo statica funziona identicamente:
+   ```powershell
+   Copy-Item -Recurse storage\app\public public\storage
+   ```
+
+**Come verificare che abbia funzionato**: apri il catalogo (`/libri`) e controlla che le copertine si vedano. In alternativa, prova ad aprire direttamente `http://127.0.0.1:8000/storage/covers/il-nome-della-rosa.png` nel browser — se funziona, mostra la copertina; se lo storage non è collegato, dà errore 404.
+
 ## Credenziali demo
 
 Create automaticamente dal seeder (`php artisan migrate --seed`):
@@ -85,6 +102,16 @@ Create automaticamente dal seeder (`php artisan migrate --seed`):
 | Cliente | `cliente@example.com` | `password` |
 
 Il catalogo viene popolato con categorie, autori e libri di esempio; l'utente cliente ha già un ordine e alcune recensioni sono precaricate.
+
+## Recuperare il link di reset password (ambiente locale)
+
+Con `MAIL_MAILER=log` (vedi "Scelte progettuali" più sotto), le email che l'applicazione genererebbe — in questo progetto, solo quella di reset password — non vengono spedite ma scritte in `storage/logs/laravel.log`. Per trovare il link dopo aver richiesto "Password dimenticata?":
+
+1. Apri `storage/logs/laravel.log`
+2. Cerca (`Ctrl+F`) `reset-password/` — compare due volte nello stesso blocco (pulsante e link testuale), sono identici
+3. Se hai già fatto più tentativi, vai all'**ultima occorrenza in fondo al file**: ogni richiesta aggiunge un nuovo blocco, non sostituisce quello precedente
+
+Il link è già completo di email nel parametro `?email=...` e porta dritto al form per scegliere la nuova password. Scade dopo 60 minuti ed è valido una sola volta.
 
 ## Test automatici
 
