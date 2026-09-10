@@ -8,9 +8,23 @@
                 </div>
             @endif
 
-            <div class="flex flex-col lg:flex-row gap-10">
-                {{-- Sidebar filtri --}}
-                <aside class="lg:w-64 shrink-0">
+            <div class="flex flex-col lg:flex-row gap-10" x-data="{ filtriAperti: false }">
+                {{-- Pulsante per aprire/chiudere i filtri, solo su mobile e tablet --}}
+                <button type="button" @click="filtriAperti = ! filtriAperti"
+                        class="lg:hidden flex items-center justify-between gap-2 bg-white border border-gray-300 rounded-full px-4 py-2.5 text-sm font-medium text-gray-700">
+                    <span class="inline-flex items-center gap-2">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="w-4 h-4">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 4.5h18M6 9h12M10 13.5h4" />
+                        </svg>
+                        {{ __('Filtri') }}
+                    </span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': filtriAperti }">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    </svg>
+                </button>
+
+                {{-- Sidebar filtri: sempre visibile da lg in su, aperta/chiusa dal pulsante sotto lg --}}
+                <aside x-cloak :class="filtriAperti ? 'block' : 'hidden'" class="lg:block lg:w-64 shrink-0">
                     <form method="GET" action="{{ route('books.index') }}" class="space-y-6">
                         <div>
                             <h2 class="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-2">Filtro</h2>

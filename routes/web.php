@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 Route::view('/privacy', 'legal.privacy')->name('legal.privacy');
 Route::view('/termini', 'legal.termini')->name('legal.termini');
 
-// Home page pubblica: libro in evidenza + ultimi arrivi
+// Home page pubblica: carosello con gli ultimi arrivi, categorie, ultime uscite e best seller
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Catalogo pubblico: visibile anche senza effettuare il login

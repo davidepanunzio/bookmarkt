@@ -19,7 +19,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-[240px_1fr_280px] gap-10">
                 {{-- Copertina --}}
                 <div>
-                    <x-book-cover :book="$book" class="w-full" />
+                    <x-book-cover :book="$book" class="w-full max-w-[240px] mx-auto lg:max-w-none" />
                 </div>
 
                 {{-- Contenuto principale --}}

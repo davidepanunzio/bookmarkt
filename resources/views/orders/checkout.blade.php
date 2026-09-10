@@ -72,7 +72,7 @@
                 </div>
 
                 {{-- Riepilogo ordine --}}
-                <div class="bg-green-50 border border-green-100 rounded-2xl p-6 lg:sticky lg:top-6">
+                <div class="bg-gray-50 border border-gray-200 rounded-2xl p-6 lg:sticky lg:top-6">
                     <h3 class="font-serif text-lg font-bold text-gray-900 mb-4">Il tuo ordine</h3>
 
                     <div class="space-y-4 max-h-80 overflow-y-auto pr-1">
@@ -90,7 +90,7 @@
                         @endforeach
                     </div>
 
-                    <div class="border-t border-green-200 mt-4 pt-4 flex items-center justify-between">
+                    <div class="border-t border-gray-200 mt-4 pt-4 flex items-center justify-between">
                         <span class="font-semibold text-gray-900">Totale</span>
                         <span class="font-serif text-xl font-bold text-gray-900">{{ number_format($cart->totale(), 2, ',', '.') }} &euro;</span>
                     </div>

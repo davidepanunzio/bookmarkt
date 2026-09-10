@@ -1,7 +1,7 @@
 {{--
     Copertina di un libro: mostra l'immagine caricata se presente, altrimenti un blocco
-    di colore con autore e titolo in overlay (come nei mockup, utile perché il catalogo
-    demo non ha foto di copertine reali).
+    di colore con autore e titolo in overlay (utile per un libro appena aggiunto
+    dall'admin che non ha ancora una copertina caricata).
     Il rapporto 2:3 (tipico di una copertina) è già incluso di default: basta passare
     solo la larghezza, es. <x-book-cover :book="$libro" class="w-full" />
 --}}

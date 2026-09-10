@@ -97,7 +97,6 @@
                     <h2 class="font-serif text-2xl font-bold text-gray-900 mb-8">Best seller</h2>
                     <div class="bg-white rounded-2xl divide-y divide-gray-100 shadow-sm">
                         @foreach ($bestSeller as $posizione => $voce)
-                            @php $nePreferitiBestSeller = in_array($voce->book->id, $preferitiIds); @endphp
                             <div class="flex items-center gap-4 p-4 sm:p-5 hover:bg-gray-50 transition-colors duration-200">
                                 <span class="shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-indigo-600 text-white text-sm font-bold">
                                     {{ $posizione + 1 }}
@@ -117,51 +116,8 @@
                                 </div>
 
                                 <div class="flex items-center gap-1 shrink-0">
-                                    @auth
-                                        <form method="POST"
-                                              action="{{ $nePreferitiBestSeller ? route('wishlist.destroy', $voce->book) : route('wishlist.store', $voce->book) }}">
-                                            @csrf
-                                            @if ($nePreferitiBestSeller) @method('DELETE') @endif
-                                            <button type="submit"
-                                                    class="inline-flex items-center justify-center w-9 h-9 rounded-full hover:bg-gray-100 {{ $nePreferitiBestSeller ? 'text-red-500' : 'text-gray-500' }}"
-                                                    title="{{ $nePreferitiBestSeller ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti' }}">
-                                                <svg viewBox="0 0 24 24" fill="{{ $nePreferitiBestSeller ? 'currentColor' : 'none' }}" stroke="currentColor" stroke-width="1.8" class="w-5 h-5">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-                                                </svg>
-                                            </button>
-                                        </form>
-                                    @else
-                                        <a href="{{ route('login') }}"
-                                           class="inline-flex items-center justify-center w-9 h-9 rounded-full text-gray-500 hover:bg-gray-100"
-                                           title="Accedi per aggiungere ai preferiti">
-                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="w-5 h-5">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-                                            </svg>
-                                        </a>
-                                    @endauth
-
-                                    @if ($voce->book->isDisponibile())
-                                        @auth
-                                            <form method="POST" action="{{ route('cart.store', $voce->book) }}">
-                                                @csrf
-                                                <button type="submit"
-                                                        class="inline-flex items-center justify-center w-9 h-9 rounded-full text-gray-500 hover:bg-gray-100 hover:text-indigo-600"
-                                                        title="Aggiungi al carrello">
-                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="w-5 h-5">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 1.943-4.594 2.256-6.75L8.25 6h-4.5m3.87 5.25L6.75 6M9 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm11.25 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
-                                                    </svg>
-                                                </button>
-                                            </form>
-                                        @else
-                                            <a href="{{ route('login') }}"
-                                               class="inline-flex items-center justify-center w-9 h-9 rounded-full text-gray-500 hover:bg-gray-100 hover:text-indigo-600"
-                                               title="Accedi per aggiungere al carrello">
-                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="w-5 h-5">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 1.943-4.594 2.256-6.75L8.25 6h-4.5m3.87 5.25L6.75 6M9 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm11.25 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
-                                                </svg>
-                                            </a>
-                                        @endauth
-                                    @endif
+                                    <x-wishlist-button :book="$voce->book" :preferiti-ids="$preferitiIds" class="w-9 h-9 hover:bg-gray-100" />
+                                    <x-cart-button :book="$voce->book" class="w-9 h-9 hover:bg-gray-100" />
                                 </div>
                             </div>
                         @endforeach
