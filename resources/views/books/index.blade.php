@@ -121,7 +121,7 @@
                     @if ($libri->isEmpty())
                         <p class="text-gray-600">Nessun libro trovato.</p>
                     @else
-                        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-10">
+                        <div class="grid grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-10">
                             @foreach ($libri as $libro)
                                 @include('books._card')
                             @endforeach

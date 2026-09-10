@@ -20,7 +20,7 @@
                     <a href="{{ route('books.index') }}" class="text-indigo-600 underline">Vai al catalogo</a>
                 </div>
             @else
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10" data-reveal>
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10" data-reveal>
                     @foreach ($libri as $libro)
                         <div class="group relative flex flex-col">
                             <form method="POST" action="{{ route('wishlist.destroy', $libro) }}" class="absolute top-3 right-3 z-10">
