@@ -35,10 +35,13 @@ class DashboardController extends Controller
             ->pluck('totale', 'status');
 
         // I 5 libri più venduti, calcolati sommando le quantità nelle righe d'ordine
+        // (ordini annullati esclusi, coerente col fatturato e con la classifica in home)
         $libriPiuVenduti = OrderItem::query()
-            ->selectRaw('book_id, SUM(quantity) as venduti')
+            ->join('orders', 'orders.id', '=', 'order_items.order_id')
+            ->where('orders.status', '!=', Order::STATUS_ANNULLATO)
+            ->selectRaw('order_items.book_id, SUM(order_items.quantity) as venduti')
             ->with('book')
-            ->groupBy('book_id')
+            ->groupBy('order_items.book_id')
             ->orderByDesc('venduti')
             ->take(5)
             ->get();

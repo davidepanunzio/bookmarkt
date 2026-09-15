@@ -67,10 +67,15 @@ class CategoryController extends Controller
     }
 
     /**
-     * Elimina una categoria (e, a cascata, i libri collegati).
+     * Elimina una categoria, a meno che contenga ancora dei libri
+     * (altrimenti la cancellazione andrebbe a cascata sui libri collegati).
      */
     public function destroy(Category $category): RedirectResponse
     {
+        if ($category->books()->exists()) {
+            return redirect()->route('admin.categories.index')->with('status', 'Categoria non eliminabile: contiene dei libri.');
+        }
+
         $category->delete();
 
         return redirect()->route('admin.categories.index')->with('status', 'Categoria eliminata.');

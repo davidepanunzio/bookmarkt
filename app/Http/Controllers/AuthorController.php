@@ -66,10 +66,15 @@ class AuthorController extends Controller
     }
 
     /**
-     * Elimina un autore (e, a cascata, i libri collegati).
+     * Elimina un autore, a meno che contenga ancora dei libri
+     * (altrimenti la cancellazione andrebbe a cascata sui libri collegati).
      */
     public function destroy(Author $author): RedirectResponse
     {
+        if ($author->books()->exists()) {
+            return redirect()->route('admin.authors.index')->with('status', 'Autore non eliminabile: ha ancora dei libri.');
+        }
+
         $author->delete();
 
         return redirect()->route('admin.authors.index')->with('status', 'Autore eliminato.');
